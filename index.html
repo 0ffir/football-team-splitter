@@ -5,44 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>כוחות לכדורגל ברביעי</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
             direction: rtl;
-            background: url('https://images.pexels.com/photos/132566/pexels-photo-132566.jpeg') no-repeat center center fixed;
+            background: url('https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg') no-repeat center center fixed;
             background-size: cover;
+            font-family: 'Roboto', sans-serif;
         }
         .container {
             margin-top: 50px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-weight: 700;
+            color: #2E7D32;
+        }
+        .btn {
+            background-color: #2E7D32;
+        }
+        .btn:hover {
+            background-color: #1B5E20;
+        }
+        .team-card {
+            min-height: 250px;
+            background-color: #F1F8E9;
+        }
+        .team-card .card-title {
+            color: #2E7D32;
+        }
+        .collection-item {
+            background-color: #FFFDE7;
         }
         .status {
             margin-top: 20px;
-            color: #28a745;
+            color: #388E3C;
             font-weight: bold;
         }
-        .team-card {
-            min-height: 200px;
+        .icon-football {
+            width: 50px;
+            height: 50px;
+            display: block;
+            margin: 0 auto 10px auto;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="center-align blue-text">כוחות לכדורגל ברביעי</h1>
+        <h1 class="center-align">כוחות לכדורגל ברביעי</h1>
         <div class="row" id="playerSelectionContainer">
             <!-- Player selection fields will be dynamically added here -->
         </div>
         <div class="center-align">
-            <button class="btn waves-effect waves-light blue" onclick="splitTeams()">חלק קבוצות</button>
-            <button class="btn waves-effect waves-light blue" onclick="resetForm()">אפס טופס</button>
-            <button class="btn waves-effect waves-light blue" onclick="navigateToDatabase()">נהל מאגר שחקנים</button>
+            <button class="btn waves-effect waves-light" onclick="splitTeams()">חלק קבוצות</button>
+            <button class="btn waves-effect waves-light" onclick="resetForm()">אפס טופס</button>
+            <button class="btn waves-effect waves-light" onclick="navigateToDatabase()">נהל מאגר שחקנים</button>
         </div>
         <div class="row teams">
             <div class="col s12 m4">
                 <div class="card team-card" id="team1Card" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div class="card-content">
-                        <span class="card-title blue-text">קבוצה 1</span>
+                        <img src="https://image.flaticon.com/icons/png/512/69/69407.png" alt="football icon" class="icon-football">
+                        <span class="card-title">קבוצה 1</span>
                         <ul id="team1" class="collection"></ul>
                         <div class="team-summary" id="summary1"></div>
                     </div>
@@ -51,7 +78,8 @@
             <div class="col s12 m4">
                 <div class="card team-card" id="team2Card" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div class="card-content">
-                        <span class="card-title blue-text">קבוצה 2</span>
+                        <img src="https://image.flaticon.com/icons/png/512/69/69407.png" alt="football icon" class="icon-football">
+                        <span class="card-title">קבוצה 2</span>
                         <ul id="team2" class="collection"></ul>
                         <div class="team-summary" id="summary2"></div>
                     </div>
@@ -60,7 +88,8 @@
             <div class="col s12 m4">
                 <div class="card team-card" id="team3Card" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div class="card-content">
-                        <span class="card-title blue-text">קבוצה 3</span>
+                        <img src="https://image.flaticon.com/icons/png/512/69/69407.png" alt="football icon" class="icon-football">
+                        <span class="card-title">קבוצה 3</span>
                         <ul id="team3" class="collection"></ul>
                         <div class="team-summary" id="summary3"></div>
                     </div>
