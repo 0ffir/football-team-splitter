@@ -4,88 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>כוחות לכדורגל ברביעי</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background-color: #f4f4f4;
             direction: rtl;
         }
-        h1 {
-            color: #007BFF;
-        }
         .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 800px;
-        }
-        .player-input {
-            display: flex;
-            flex-direction: column;
-            margin: 10px;
-            width: calc(33.33% - 20px);
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .player-input select {
-            margin-bottom: 5px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .teams {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            max-width: 800px;
-            margin-top: 20px;
-        }
-        .team {
-            border: 1px solid #000;
-            background-color: #fff;
-            padding: 10px;
-            width: 30%;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h3 {
-            text-align: center;
-            color: #007BFF;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            padding: 5px;
-            border-bottom: 1px solid #ccc;
-        }
-        li:last-child {
-            border-bottom: none;
-        }
-        .team-summary {
-            text-align: center;
-            margin-top: 10px;
-            font-weight: bold;
+            margin-top: 50px;
         }
         .status {
             margin-top: 20px;
@@ -95,32 +20,49 @@
     </style>
 </head>
 <body>
-    <h1>כוחות לכדורגל ברביעי</h1>
-    <div class="container" id="playerSelectionContainer">
-        <!-- Player selection fields will be dynamically added here -->
+    <div class="container">
+        <h1 class="center-align blue-text">כוחות לכדורגל ברביעי</h1>
+        <div class="row" id="playerSelectionContainer">
+            <!-- Player selection fields will be dynamically added here -->
+        </div>
+        <div class="center-align">
+            <button class="btn waves-effect waves-light blue" onclick="splitTeams()">חלק קבוצות</button>
+            <button class="btn waves-effect waves-light blue" onclick="resetForm()">אפס טופס</button>
+            <button class="btn waves-effect waves-light blue" onclick="navigateToDatabase()">נהל מאגר שחקנים</button>
+        </div>
+        <div class="row teams">
+            <div class="col s12 m4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title blue-text">קבוצה 1</span>
+                        <ul id="team1" class="collection"></ul>
+                        <div class="team-summary" id="summary1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title blue-text">קבוצה 2</span>
+                        <ul id="team2" class="collection"></ul>
+                        <div class="team-summary" id="summary2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title blue-text">קבוצה 3</span>
+                        <ul id="team3" class="collection"></ul>
+                        <div class="team-summary" id="summary3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status center-align" id="statusMessage"></div>
     </div>
-    <button onclick="splitTeams()">חלק קבוצות</button>
-    <button onclick="resetForm()">אפס טופס</button>
-    <button onclick="navigateToDatabase()">נהל מאגר שחקנים</button>
-    <div class="teams">
-        <div class="team" id="team1">
-            <h3>קבוצה 1</h3>
-            <ul></ul>
-            <div class="team-summary" id="summary1"></div>
-        </div>
-        <div class="team" id="team2">
-            <h3>קבוצה 2</h3>
-            <ul></ul>
-            <div class="team-summary" id="summary2"></div>
-        </div>
-        <div class="team" id="team3">
-            <h3>קבוצה 3</h3>
-            <ul></ul>
-            <div class="team-summary" id="summary3"></div>
-        </div>
-    </div>
-    <div class="status" id="statusMessage"></div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         const players = [];
 
@@ -130,7 +72,7 @@
             const playerDatabase = JSON.parse(localStorage.getItem('players')) || [];
             for (let i = 1; i <= 18; i++) {
                 const playerInputDiv = document.createElement('div');
-                playerInputDiv.className = 'player-input';
+                playerInputDiv.className = 'input-field col s12 m4';
                 const select = document.createElement('select');
                 select.id = `playerSelect${i}`;
                 playerDatabase.forEach(player => {
@@ -141,6 +83,7 @@
                 });
                 playerInputDiv.appendChild(select);
                 playerSelectionContainer.appendChild(playerInputDiv);
+                M.FormSelect.init(document.querySelectorAll('select'));
             }
         }
 
@@ -174,12 +117,13 @@
                 teams[i % 3].push(players[i]);
             }
             for (let i = 0; i < 3; i++) {
-                const teamElement = document.getElementById(`team${i+1}`).querySelector('ul');
+                const teamElement = document.getElementById(`team${i+1}`);
                 const summaryElement = document.getElementById(`summary${i+1}`);
                 teamElement.innerHTML = '';
                 let totalLevel = 0;
                 teams[i].forEach(player => {
                     const li = document.createElement('li');
+                    li.className = 'collection-item';
                     li.textContent = `${player.name} (רמה: ${player.level})`;
                     teamElement.appendChild(li);
                     totalLevel += player.level;
@@ -193,7 +137,7 @@
         function resetForm() {
             loadPlayerSelection();
             for (let i = 1; i <= 3; i++) {
-                document.getElementById(`team${i}`).querySelector('ul').innerHTML = '';
+                document.getElementById(`team${i}`).innerHTML = '';
                 document.getElementById(`summary${i}`).textContent = '';
             }
             showStatus('הטופס אופס בהצלחה');
