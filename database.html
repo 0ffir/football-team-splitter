@@ -68,6 +68,11 @@
         .edit-buttons button:hover {
             background-color: #0056b3;
         }
+        .status {
+            margin-top: 20px;
+            color: #28a745;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -94,8 +99,8 @@
         <tbody id="playerTableBody">
         </tbody>
     </table>
+    <div class="status" id="statusMessage"></div>
     <button onclick="navigateToSplitter()">לך לעמוד חלוקת קבוצות</button>
-    <button onclick="openInNewTab('index.html')">פתח עמוד חלוקת קבוצות בכרטיסייה חדשה</button>
 
     <script>
         function loadPlayers() {
@@ -133,6 +138,7 @@
                 loadPlayers();
                 document.getElementById('playerName').value = '';
                 document.getElementById('playerLevel').value = '1';
+                showStatus('שחקן נוסף בהצלחה');
             }
         }
 
@@ -144,6 +150,7 @@
                 players[index] = { name, level };
                 localStorage.setItem('players', JSON.stringify(players));
                 loadPlayers();
+                showStatus('השחקן עודכן בהצלחה');
             }
         }
 
@@ -152,14 +159,19 @@
             players.splice(index, 1);
             localStorage.setItem('players', JSON.stringify(players));
             loadPlayers();
+            showStatus('השחקן נמחק בהצלחה');
+        }
+
+        function showStatus(message) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            setTimeout(() => {
+                statusMessage.textContent = '';
+            }, 3000);
         }
 
         function navigateToSplitter() {
             window.location.href = 'index.html';
-        }
-
-        function openInNewTab(url) {
-            window.open(url, '_blank');
         }
 
         window.onload = loadPlayers;
