@@ -9,7 +9,7 @@
     <style>
         body {
             direction: rtl;
-            background: url('https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg') no-repeat center center fixed;
+            background: url('https://images.pexels.com/photos/132566/pexels-photo-132566.jpeg') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Roboto', sans-serif;
         }
@@ -50,6 +50,25 @@
             height: 50px;
             display: block;
             margin: 0 auto 10px auto;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 20px;
+                padding: 10px;
+            }
+            .input-field, .file-field {
+                margin: 0;
+            }
+            .btn, .btn-small {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .card-content {
+                padding: 10px;
+            }
+            .team-card {
+                min-height: 200px;
+            }
         }
     </style>
 </head>
