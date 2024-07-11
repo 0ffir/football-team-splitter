@@ -11,82 +11,73 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
         }
         form {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
         }
-        input, button {
+        input, textarea, button {
             margin: 5px;
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
         .teams {
             display: flex;
             justify-content: space-around;
             width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
         }
         .team {
             border: 1px solid #000;
+            background-color: #fff;
             padding: 10px;
             width: 30%;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h3 {
             text-align: center;
+            color: #007BFF;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        li:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
     <h1>Football Team Splitter</h1>
     <form id="playerForm">
-        <input type="text" id="playerName" placeholder="Player Name" required>
-        <input type="number" id="playerLevel" placeholder="Skill Level (1-10)" min="1" max="10" required>
-        <button type="submit">Add Player</button>
+        <textarea id="playerList" placeholder="Enter players (Name, Level) one per line"></textarea>
+        <button type="button" onclick="addPlayers()">Add Players</button>
     </form>
     <button onclick="splitTeams()">Split Teams</button>
-    <div class="teams">
-        <div class="team" id="team1">
-            <h3>Team 1</h3>
-            <ul></ul>
-        </div>
-        <div class="team" id="team2">
-            <h3>Team 2</h3>
-            <ul></ul>
-        </div>
-        <div class="team" id="team3">
-            <h3>Team 3</h3>
-            <ul></ul>
-        </div>
-    </div>
-
-    <script>
-        const players = [];
-
-        document.getElementById('playerForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const name = document.getElementById('playerName').value;
-            const level = parseInt(document.getElementById('playerLevel').value);
-            players.push({ name, level });
-            document.getElementById('playerName').value = '';
-            document.getElementById('playerLevel').value = '';
-        });
-
-        function splitTeams() {
-            players.sort((a, b) => b.level - a.level);
-            const teams = [[], [], []];
-            for (let i = 0; i < players.length; i++) {
-                teams[i % 3].push(players[i]);
-            }
-            for (let i = 0; i < 3; i++) {
-                const teamElement = document.getElementById(`team${i+1}`).querySelector('ul');
-                teamElement.innerHTML = '';
-                teams[i].forEach(player => {
-                    const li = document.createElement('li');
-                    li.textContent = `${player.name} (Level: ${player.level})`;
-                    teamElement.appendChild(li);
-                });
-            }
-        }
-    </script>
-</body>
-</html>
+    <div class="teams
