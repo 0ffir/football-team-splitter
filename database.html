@@ -4,69 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ניהול מאגר שחקנים</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background-color: #f4f4f4;
             direction: rtl;
         }
-        h1 {
-            color: #007BFF;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 400px;
-        }
-        input, select, button {
-            margin: 5px;
-            padding: 10px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            max-width: 400px;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-        .edit-buttons {
-            display: flex;
-            justify-content: space-around;
-        }
-        .edit-buttons button {
-            margin: 0 5px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .edit-buttons button:hover {
-            background-color: #0056b3;
+        .container {
+            margin-top: 50px;
         }
         .status {
             margin-top: 20px;
@@ -76,33 +20,50 @@
     </style>
 </head>
 <body>
-    <h1>ניהול מאגר שחקנים</h1>
-    <form id="playerForm">
-        <input type="text" id="playerName" placeholder="שם שחקן" required>
-        <select id="playerLevel" required>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-        <button type="button" onclick="addPlayer()">הוסף שחקן</button>
-    </form>
-    <table>
-        <thead>
-            <tr>
-                <th>שם שחקן</th>
-                <th>רמה</th>
-                <th>פעולות</th>
-            </tr>
-        </thead>
-        <tbody id="playerTableBody">
-        </tbody>
-    </table>
-    <div class="status" id="statusMessage"></div>
-    <button onclick="navigateToSplitter()">לך לעמוד חלוקת קבוצות</button>
+    <div class="container">
+        <h1 class="center-align blue-text">ניהול מאגר שחקנים</h1>
+        <form id="playerForm" class="row">
+            <div class="input-field col s12 m6">
+                <input type="text" id="playerName" required>
+                <label for="playerName">שם שחקן</label>
+            </div>
+            <div class="input-field col s12 m6">
+                <select id="playerLevel" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <label for="playerLevel">רמה</label>
+            </div>
+            <div class="col s12 center-align">
+                <button type="button" class="btn waves-effect waves-light blue" onclick="addPlayer()">הוסף שחקן</button>
+            </div>
+        </form>
+        <table class="highlight centered">
+            <thead>
+                <tr>
+                    <th>שם שחקן</th>
+                    <th>רמה</th>
+                    <th>פעולות</th>
+                </tr>
+            </thead>
+            <tbody id="playerTableBody"></tbody>
+        </table>
+        <div class="status center-align" id="statusMessage"></div>
+        <div class="center-align">
+            <button class="btn waves-effect waves-light blue" onclick="navigateToSplitter()">לך לעמוד חלוקת קבוצות</button>
+        </div>
+    </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems);
+        });
+
         function loadPlayers() {
             const players = JSON.parse(localStorage.getItem('players')) || [];
             const tableBody = document.getElementById('playerTableBody');
@@ -120,11 +81,12 @@
                             <option value="5" ${player.level == 5 ? 'selected' : ''}>5</option>
                         </select>
                     </td>
-                    <td class="edit-buttons">
-                        <button onclick="updatePlayer(${index})">עדכן</button>
-                        <button onclick="deletePlayer(${index})">מחק</button>
+                    <td>
+                        <button class="btn-small blue" onclick="updatePlayer(${index})">עדכן</button>
+                        <button class="btn-small red" onclick="deletePlayer(${index})">מחק</button>
                     </td>`;
                 tableBody.appendChild(row);
+                M.FormSelect.init(document.querySelectorAll('select'));
             });
         }
 
@@ -139,6 +101,7 @@
                 document.getElementById('playerName').value = '';
                 document.getElementById('playerLevel').value = '1';
                 showStatus('שחקן נוסף בהצלחה');
+                M.updateTextFields();
             }
         }
 
