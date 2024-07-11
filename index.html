@@ -8,9 +8,14 @@
     <style>
         body {
             direction: rtl;
+            background: url('https://images.pexels.com/photos/132566/pexels-photo-132566.jpeg') no-repeat center center fixed;
+            background-size: cover;
         }
         .container {
             margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
         }
         .status {
             margin-top: 20px;
@@ -62,6 +67,7 @@
         <div class="status center-align" id="statusMessage"></div>
     </div>
 
+    <audio id="anthem" src="https://www.uefa.com/MultimediaFiles/Download/competitions/General/02/12/38/23/2123823_DOWNLOAD.mp3" loop></audio>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         const players = [];
@@ -89,12 +95,20 @@
 
         function addPlayers() {
             players.length = 0;
+            const selectedPlayers = new Set();
             for (let i = 1; i <= 18; i++) {
                 const select = document.getElementById(`playerSelect${i}`);
                 const selectedPlayer = select.options[select.selectedIndex].text;
+                const playerName = select.value;
+                if (selectedPlayers.has(playerName)) {
+                    alert(`השחקן ${playerName} נבחר יותר מפעם אחת. אנא בחר שחקן אחר.`);
+                    return false;
+                }
+                selectedPlayers.add(playerName);
                 const playerLevel = selectedPlayer.match(/\(רמה: (\d)\)/)[1];
-                players.push({ name: select.value, level: parseInt(playerLevel) });
+                players.push({ name: playerName, level: parseInt(playerLevel) });
             }
+            return true;
         }
 
         function shuffle(array) {
@@ -105,7 +119,9 @@
         }
 
         function splitTeams() {
-            addPlayers();
+            if (!addPlayers()) {
+                return;
+            }
             if (players.length !== 18) {
                 alert('אנא מלא את כל השדות.');
                 return;
@@ -155,7 +171,15 @@
             window.location.href = 'database.html';
         }
 
-        window.onload = loadPlayerSelection;
+        function playAnthem() {
+            const anthem = document.getElementById('anthem');
+            anthem.play();
+        }
+
+        window.onload = () => {
+            loadPlayerSelection();
+            playAnthem();
+        };
     </script>
 </body>
 </html>
