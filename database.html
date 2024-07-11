@@ -78,6 +78,7 @@
         </tbody>
     </table>
     <button onclick="navigateToSplitter()">לך לעמוד חלוקת קבוצות</button>
+    <button onclick="openInNewTab('index.html')">פתח עמוד חלוקת קבוצות בכרטיסייה חדשה</button>
 
     <script>
         function loadPlayers() {
@@ -106,6 +107,10 @@
 
         function navigateToSplitter() {
             window.location.href = 'index.html';
+        }
+
+        function openInNewTab(url) {
+            window.open(url, '_blank');
         }
 
         window.onload = loadPlayers;
