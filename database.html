@@ -46,6 +46,11 @@
                 <button type="button" class="btn waves-effect waves-light blue" onclick="addPlayer()">הוסף שחקן</button>
             </div>
         </form>
+        <div class="row">
+            <div class="input-field col s12">
+                <input type="text" id="searchPlayer" onkeyup="filterPlayers()" placeholder="חפש שחקן...">
+            </div>
+        </div>
         <table class="highlight centered">
             <thead>
                 <tr>
@@ -74,6 +79,33 @@
             const tableBody = document.getElementById('playerTableBody');
             tableBody.innerHTML = '';
             players.forEach((player, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" value="${player.name}" id="playerName${index}" /></td>
+                    <td>
+                        <select id="playerLevel${index}">
+                            <option value="1" ${player.level == 1 ? 'selected' : ''}>1</option>
+                            <option value="2" ${player.level == 2 ? 'selected' : ''}>2</option>
+                            <option value="3" ${player.level == 3 ? 'selected' : ''}>3</option>
+                            <option value="4" ${player.level == 4 ? 'selected' : ''}>4</option>
+                            <option value="5" ${player.level == 5 ? 'selected' : ''}>5</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn-small blue" onclick="updatePlayer(${index})">עדכן</button>
+                        <button class="btn-small red" onclick="deletePlayer(${index})">מחק</button>
+                    </td>`;
+                tableBody.appendChild(row);
+                M.FormSelect.init(document.querySelectorAll('select'));
+            });
+        }
+
+        function filterPlayers() {
+            const searchValue = document.getElementById('searchPlayer').value.toLowerCase();
+            const players = JSON.parse(localStorage.getItem('players')) || [];
+            const tableBody = document.getElementById('playerTableBody');
+            tableBody.innerHTML = '';
+            players.filter(player => player.name.toLowerCase().includes(searchValue)).forEach((player, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td><input type="text" value="${player.name}" id="playerName${index}" /></td>
