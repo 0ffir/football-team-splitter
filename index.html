@@ -15,7 +15,7 @@
             direction: rtl;
         }
         h1 {
-            color: #333;
+            color: #007BFF;
         }
         .container {
             display: flex;
@@ -28,6 +28,10 @@
             flex-direction: column;
             margin: 10px;
             width: calc(50% - 20px);
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .player-input input, .player-input select {
             margin-bottom: 5px;
@@ -36,13 +40,14 @@
             border-radius: 5px;
         }
         button {
-            margin: 20px 0;
+            margin: 10px;
             padding: 10px 20px;
             background-color: #007BFF;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
         button:hover {
             background-color: #0056b3;
@@ -76,6 +81,11 @@
         }
         li:last-child {
             border-bottom: none;
+        }
+        .team-summary {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -265,18 +275,22 @@
         </div>
     </div>
     <button onclick="splitTeams()">חלק קבוצות</button>
+    <button onclick="resetForm()">אפס טופס</button>
     <div class="teams">
         <div class="team" id="team1">
             <h3>קבוצה 1</h3>
             <ul></ul>
+            <div class="team-summary" id="summary1"></div>
         </div>
         <div class="team" id="team2">
             <h3>קבוצה 2</h3>
             <ul></ul>
+            <div class="team-summary" id="summary2"></div>
         </div>
         <div class="team" id="team3">
             <h3>קבוצה 3</h3>
             <ul></ul>
+            <div class="team-summary" id="summary3"></div>
         </div>
     </div>
 
@@ -303,6 +317,10 @@
 
         function splitTeams() {
             addPlayers();
+            if (players.length !== 18) {
+                alert('אנא מלא את כל השדות.');
+                return;
+            }
             shuffle(players);
             players.sort((a, b) => b.level - a.level);
             const teams = [[], [], []];
@@ -311,12 +329,28 @@
             }
             for (let i = 0; i < 3; i++) {
                 const teamElement = document.getElementById(`team${i+1}`).querySelector('ul');
+                const summaryElement = document.getElementById(`summary${i+1}`);
                 teamElement.innerHTML = '';
+                let totalLevel = 0;
                 teams[i].forEach(player => {
                     const li = document.createElement('li');
                     li.textContent = `${player.name} (רמה: ${player.level})`;
                     teamElement.appendChild(li);
+                    totalLevel += player.level;
                 });
+                const avgLevel = (totalLevel / teams[i].length).toFixed(2);
+                summaryElement.textContent = `ממוצע רמה: ${avgLevel}`;
+            }
+        }
+
+        function resetForm() {
+            for (let i = 1; i <= 18; i++) {
+                document.getElementById(`playerName${i}`).value = '';
+                document.getElementById(`playerLevel${i}`).value = '1';
+            }
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`team${i}`).querySelector('ul').innerHTML = '';
+                document.getElementById(`summary${i}`).textContent = '';
             }
         }
     </script>
