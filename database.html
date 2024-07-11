@@ -34,6 +34,7 @@
             </div>
             <div class="input-field col s12 m6">
                 <select id="playerLevel" required>
+                    <option value="" disabled selected>בחר רמה</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -41,6 +42,15 @@
                     <option value="5">5</option>
                 </select>
                 <label for="playerLevel">רמה</label>
+            </div>
+            <div class="file-field input-field col s12">
+                <div class="btn">
+                    <span>תמונת שחקן</span>
+                    <input type="file" id="playerImage">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
             </div>
             <div class="col s12 center-align">
                 <button type="button" class="btn waves-effect waves-light blue" onclick="addPlayer()">הוסף שחקן</button>
@@ -54,6 +64,7 @@
         <table class="highlight centered">
             <thead>
                 <tr>
+                    <th>תמונה</th>
                     <th>שם שחקן</th>
                     <th>רמה</th>
                     <th>פעולות</th>
@@ -81,6 +92,7 @@
             players.forEach((player, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
+                    <td><img src="${player.image || 'https://via.placeholder.com/50'}" alt="player image" width="50"></td>
                     <td><input type="text" value="${player.name}" id="playerName${index}" /></td>
                     <td>
                         <select id="playerLevel${index}">
@@ -108,6 +120,7 @@
             players.filter(player => player.name.toLowerCase().includes(searchValue)).forEach((player, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
+                    <td><img src="${player.image || 'https://via.placeholder.com/50'}" alt="player image" width="50"></td>
                     <td><input type="text" value="${player.name}" id="playerName${index}" /></td>
                     <td>
                         <select id="playerLevel${index}">
@@ -130,13 +143,15 @@
         function addPlayer() {
             const name = document.getElementById('playerName').value.trim();
             const level = document.getElementById('playerLevel').value;
+            const image = document.getElementById('playerImage').files[0] ? URL.createObjectURL(document.getElementById('playerImage').files[0]) : '';
             if (name && level) {
                 const players = JSON.parse(localStorage.getItem('players')) || [];
-                players.push({ name, level });
+                players.push({ name, level, image });
                 localStorage.setItem('players', JSON.stringify(players));
                 loadPlayers();
                 document.getElementById('playerName').value = '';
-                document.getElementById('playerLevel').value = '1';
+                document.getElementById('playerLevel').value = '';
+                document.getElementById('playerImage').value = '';
                 showStatus('שחקן נוסף בהצלחה');
                 M.updateTextFields();
             }
@@ -147,7 +162,8 @@
             const level = document.getElementById(`playerLevel${index}`).value;
             if (name && level) {
                 const players = JSON.parse(localStorage.getItem('players')) || [];
-                players[index] = { name, level };
+                players[index].name = name;
+                players[index].level = level;
                 localStorage.setItem('players', JSON.stringify(players));
                 loadPlayers();
                 showStatus('השחקן עודכן בהצלחה');
