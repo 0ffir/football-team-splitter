@@ -25,15 +25,22 @@
             width: 100%;
             max-width: 600px;
         }
+        .player-input {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 10px;
+        }
         input, button {
             margin: 5px;
             padding: 10px;
-            width: 100%;
-            max-width: 250px;
+            width: 48%;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
         button {
+            width: 200px;
             background-color: #007BFF;
             color: white;
             border: none;
@@ -77,22 +84,22 @@
 <body>
     <h1>כוחות לכדורגל ברביעי</h1>
     <form id="playerForm">
-        <div>
+        <!-- Player input fields -->
+        <div class="player-input">
             <input type="text" id="playerName1" placeholder="שם שחקן 1" required>
             <input type="number" id="playerLevel1" placeholder="רמה (1-10)" min="1" max="10" required>
         </div>
-        <div>
+        <div class="player-input">
             <input type="text" id="playerName2" placeholder="שם שחקן 2" required>
             <input type="number" id="playerLevel2" placeholder="רמה (1-10)" min="1" max="10" required>
         </div>
-        <!-- Repeat for all 18 players -->
-        <div>
+        <!-- Repeat similar input blocks for all 18 players -->
+        <div class="player-input">
             <input type="text" id="playerName18" placeholder="שם שחקן 18" required>
             <input type="number" id="playerLevel18" placeholder="רמה (1-10)" min="1" max="10" required>
         </div>
-        <button type="button" onclick="addPlayers()">הוסף שחקנים</button>
+        <button type="button" onclick="splitTeams()">חלק קבוצות</button>
     </form>
-    <button onclick="splitTeams()">חלק קבוצות</button>
     <div class="teams">
         <div class="team" id="team1">
             <h3>קבוצה 1</h3>
