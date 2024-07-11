@@ -97,6 +97,7 @@
     <button onclick="splitTeams()">חלק קבוצות</button>
     <button onclick="resetForm()">אפס טופס</button>
     <button onclick="navigateToDatabase()">נהל מאגר שחקנים</button>
+    <button onclick="openInNewTab('database.html')">פתח עמוד ניהול מאגר שחקנים בכרטיסייה חדשה</button>
     <div class="teams">
         <div class="team" id="team1">
             <h3>קבוצה 1</h3>
@@ -193,6 +194,10 @@
 
         function navigateToDatabase() {
             window.location.href = 'database.html';
+        }
+
+        function openInNewTab(url) {
+            window.open(url, '_blank');
         }
 
         window.onload = loadPlayerSelection;
