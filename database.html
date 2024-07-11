@@ -41,6 +41,13 @@
         .file-field .btn:hover {
             background-color: #1B5E20;
         }
+        .input-field input[type=text]:focus + label, .input-field input[type=text]:valid + label {
+            color: #2E7D32 !important;
+        }
+        .input-field input[type=text]:focus, .input-field input[type=text]:valid {
+            border-bottom: 1px solid #2E7D32 !important;
+            box-shadow: 0 1px 0 0 #2E7D32 !important;
+        }
     </style>
 </head>
 <body>
@@ -112,9 +119,9 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td><img src="${player.image || 'https://via.placeholder.com/50'}" alt="player image" width="50"></td>
-                    <td><input type="text" value="${player.name}" id="playerName${index}" /></td>
+                    <td><input type="text" value="${player.name}" id="playerName${index}" style="width: 90%;" /></td>
                     <td>
-                        <select id="playerLevel${index}">
+                        <select id="playerLevel${index}" style="width: 90%;">
                             <option value="1" ${player.level == 1 ? 'selected' : ''}>1</option>
                             <option value="2" ${player.level == 2 ? 'selected' : ''}>2</option>
                             <option value="3" ${player.level == 3 ? 'selected' : ''}>3</option>
@@ -140,9 +147,9 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td><img src="${player.image || 'https://via.placeholder.com/50'}" alt="player image" width="50"></td>
-                    <td><input type="text" value="${player.name}" id="playerName${index}" /></td>
+                    <td><input type="text" value="${player.name}" id="playerName${index}" style="width: 90%;" /></td>
                     <td>
-                        <select id="playerLevel${index}">
+                        <select id="playerLevel${index}" style="width: 90%;">
                             <option value="1" ${player.level == 1 ? 'selected' : ''}>1</option>
                             <option value="2" ${player.level == 2 ? 'selected' : ''}>2</option>
                             <option value="3" ${player.level == 3 ? 'selected' : ''}>3</option>
