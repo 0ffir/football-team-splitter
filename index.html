@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football Team Splitter</title>
+    <title>כוחות לכדורגל ברביעי</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,6 +12,7 @@
             align-items: center;
             padding: 20px;
             background-color: #f4f4f4;
+            direction: rtl;
         }
         h1 {
             color: #333;
@@ -22,13 +23,13 @@
             align-items: center;
             margin-bottom: 20px;
             width: 100%;
-            max-width: 400px;
+            max-width: 600px;
         }
-        input, textarea, button {
+        input, button {
             margin: 5px;
             padding: 10px;
             width: 100%;
-            max-width: 400px;
+            max-width: 250px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
@@ -74,10 +75,78 @@
     </style>
 </head>
 <body>
-    <h1>Football Team Splitter</h1>
+    <h1>כוחות לכדורגל ברביעי</h1>
     <form id="playerForm">
-        <textarea id="playerList" placeholder="Enter players (Name, Level) one per line"></textarea>
-        <button type="button" onclick="addPlayers()">Add Players</button>
+        <div>
+            <input type="text" id="playerName1" placeholder="שם שחקן 1" required>
+            <input type="number" id="playerLevel1" placeholder="רמה (1-10)" min="1" max="10" required>
+        </div>
+        <div>
+            <input type="text" id="playerName2" placeholder="שם שחקן 2" required>
+            <input type="number" id="playerLevel2" placeholder="רמה (1-10)" min="1" max="10" required>
+        </div>
+        <!-- Repeat for all 18 players -->
+        <div>
+            <input type="text" id="playerName18" placeholder="שם שחקן 18" required>
+            <input type="number" id="playerLevel18" placeholder="רמה (1-10)" min="1" max="10" required>
+        </div>
+        <button type="button" onclick="addPlayers()">הוסף שחקנים</button>
     </form>
-    <button onclick="splitTeams()">Split Teams</button>
-    <div class="teams
+    <button onclick="splitTeams()">חלק קבוצות</button>
+    <div class="teams">
+        <div class="team" id="team1">
+            <h3>קבוצה 1</h3>
+            <ul></ul>
+        </div>
+        <div class="team" id="team2">
+            <h3>קבוצה 2</h3>
+            <ul></ul>
+        </div>
+        <div class="team" id="team3">
+            <h3>קבוצה 3</h3>
+            <ul></ul>
+        </div>
+    </div>
+
+    <script>
+        const players = [];
+
+        function addPlayers() {
+            players.length = 0;
+            for (let i = 1; i <= 18; i++) {
+                const name = document.getElementById(`playerName${i}`).value.trim();
+                const level = parseInt(document.getElementById(`playerLevel${i}`).value.trim());
+                if (name && level && !isNaN(level)) {
+                    players.push({ name, level });
+                }
+            }
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function splitTeams() {
+            addPlayers();
+            shuffle(players);
+            players.sort((a, b) => b.level - a.level);
+            const teams = [[], [], []];
+            for (let i = 0; i < players.length; i++) {
+                teams[i % 3].push(players[i]);
+            }
+            for (let i = 0; i < 3; i++) {
+                const teamElement = document.getElementById(`team${i+1}`).querySelector('ul');
+                teamElement.innerHTML = '';
+                teams[i].forEach(player => {
+                    const li = document.createElement('li');
+                    li.textContent = `${player.name} (רמה: ${player.level})`;
+                    teamElement.appendChild(li);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
