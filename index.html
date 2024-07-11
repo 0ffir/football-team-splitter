@@ -22,6 +22,9 @@
             color: #28a745;
             font-weight: bold;
         }
+        .team-card {
+            min-height: 200px;
+        }
     </style>
 </head>
 <body>
@@ -37,7 +40,7 @@
         </div>
         <div class="row teams">
             <div class="col s12 m4">
-                <div class="card">
+                <div class="card team-card" id="team1Card" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div class="card-content">
                         <span class="card-title blue-text">קבוצה 1</span>
                         <ul id="team1" class="collection"></ul>
@@ -46,7 +49,7 @@
                 </div>
             </div>
             <div class="col s12 m4">
-                <div class="card">
+                <div class="card team-card" id="team2Card" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div class="card-content">
                         <span class="card-title blue-text">קבוצה 2</span>
                         <ul id="team2" class="collection"></ul>
@@ -55,7 +58,7 @@
                 </div>
             </div>
             <div class="col s12 m4">
-                <div class="card">
+                <div class="card team-card" id="team3Card" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div class="card-content">
                         <span class="card-title blue-text">קבוצה 3</span>
                         <ul id="team3" class="collection"></ul>
@@ -140,6 +143,9 @@
                 teams[i].forEach(player => {
                     const li = document.createElement('li');
                     li.className = 'collection-item';
+                    li.draggable = true;
+                    li.ondragstart = drag;
+                    li.id = `${player.name}-${i}`;
                     li.textContent = `${player.name} (רמה: ${player.level})`;
                     teamElement.appendChild(li);
                     totalLevel += player.level;
@@ -174,6 +180,37 @@
         function playAnthem() {
             const anthem = document.getElementById('anthem');
             anthem.play();
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            const element = document.getElementById(data);
+            event.target.appendChild(element);
+            updateSummaries();
+        }
+
+        function updateSummaries() {
+            for (let i = 1; i <= 3; i++) {
+                const teamElement = document.getElementById(`team${i}`);
+                const summaryElement = document.getElementById(`summary${i}`);
+                const players = teamElement.querySelectorAll('li');
+                let totalLevel = 0;
+                players.forEach(player => {
+                    const level = player.textContent.match(/\(רמה: (\d)\)/)[1];
+                    totalLevel += parseInt(level);
+                });
+                const avgLevel = (totalLevel / players.length).toFixed(2);
+                summaryElement.textContent = `ממוצע רמה: ${avgLevel}`;
+            }
         }
 
         window.onload = () => {
