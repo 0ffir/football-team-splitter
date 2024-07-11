@@ -52,6 +52,22 @@
             padding: 10px;
             text-align: center;
         }
+        .edit-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+        .edit-buttons button {
+            margin: 0 5px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-buttons button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -72,6 +88,7 @@
             <tr>
                 <th>שם שחקן</th>
                 <th>רמה</th>
+                <th>פעולות</th>
             </tr>
         </thead>
         <tbody id="playerTableBody">
@@ -85,9 +102,23 @@
             const players = JSON.parse(localStorage.getItem('players')) || [];
             const tableBody = document.getElementById('playerTableBody');
             tableBody.innerHTML = '';
-            players.forEach(player => {
+            players.forEach((player, index) => {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${player.name}</td><td>${player.level}</td>`;
+                row.innerHTML = `
+                    <td><input type="text" value="${player.name}" id="playerName${index}" /></td>
+                    <td>
+                        <select id="playerLevel${index}">
+                            <option value="1" ${player.level == 1 ? 'selected' : ''}>1</option>
+                            <option value="2" ${player.level == 2 ? 'selected' : ''}>2</option>
+                            <option value="3" ${player.level == 3 ? 'selected' : ''}>3</option>
+                            <option value="4" ${player.level == 4 ? 'selected' : ''}>4</option>
+                            <option value="5" ${player.level == 5 ? 'selected' : ''}>5</option>
+                        </select>
+                    </td>
+                    <td class="edit-buttons">
+                        <button onclick="updatePlayer(${index})">עדכן</button>
+                        <button onclick="deletePlayer(${index})">מחק</button>
+                    </td>`;
                 tableBody.appendChild(row);
             });
         }
@@ -103,6 +134,24 @@
                 document.getElementById('playerName').value = '';
                 document.getElementById('playerLevel').value = '1';
             }
+        }
+
+        function updatePlayer(index) {
+            const name = document.getElementById(`playerName${index}`).value.trim();
+            const level = document.getElementById(`playerLevel${index}`).value;
+            if (name && level) {
+                const players = JSON.parse(localStorage.getItem('players')) || [];
+                players[index] = { name, level };
+                localStorage.setItem('players', JSON.stringify(players));
+                loadPlayers();
+            }
+        }
+
+        function deletePlayer(index) {
+            const players = JSON.parse(localStorage.getItem('players')) || [];
+            players.splice(index, 1);
+            localStorage.setItem('players', JSON.stringify(players));
+            loadPlayers();
         }
 
         function navigateToSplitter() {
