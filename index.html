@@ -94,4 +94,124 @@
         }
     </style>
 </head>
-<body
+<body>
+    <h1>כוחות לכדורגל ברביעי</h1>
+    <div class="container" id="playerSelectionContainer">
+        <!-- Player selection fields will be dynamically added here -->
+    </div>
+    <button onclick="splitTeams()">חלק קבוצות</button>
+    <button onclick="resetForm()">אפס טופס</button>
+    <button onclick="navigateToDatabase()">נהל מאגר שחקנים</button>
+    <div class="teams">
+        <div class="team" id="team1">
+            <h3>קבוצה 1</h3>
+            <ul></ul>
+            <div class="team-summary" id="summary1"></div>
+        </div>
+        <div class="team" id="team2">
+            <h3>קבוצה 2</h3>
+            <ul></ul>
+            <div class="team-summary" id="summary2"></div>
+        </div>
+        <div class="team" id="team3">
+            <h3>קבוצה 3</h3>
+            <ul></ul>
+            <div class="team-summary" id="summary3"></div>
+        </div>
+    </div>
+    <div class="status" id="statusMessage"></div>
+
+    <script>
+        const players = [];
+
+        function loadPlayerSelection() {
+            const playerSelectionContainer = document.getElementById('playerSelectionContainer');
+            playerSelectionContainer.innerHTML = '';
+            const playerDatabase = JSON.parse(localStorage.getItem('players')) || [];
+            for (let i = 1; i <= 18; i++) {
+                const playerInputDiv = document.createElement('div');
+                playerInputDiv.className = 'player-input';
+                const select = document.createElement('select');
+                select.id = `playerSelect${i}`;
+                playerDatabase.forEach(player => {
+                    const option = document.createElement('option');
+                    option.value = player.name;
+                    option.text = `${player.name} (רמה: ${player.level})`;
+                    select.appendChild(option);
+                });
+                playerInputDiv.appendChild(select);
+                playerSelectionContainer.appendChild(playerInputDiv);
+            }
+        }
+
+        function addPlayers() {
+            players.length = 0;
+            for (let i = 1; i <= 18; i++) {
+                const select = document.getElementById(`playerSelect${i}`);
+                const selectedPlayer = select.options[select.selectedIndex].text;
+                const playerLevel = selectedPlayer.match(/\(רמה: (\d)\)/)[1];
+                players.push({ name: select.value, level: parseInt(playerLevel) });
+            }
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function splitTeams() {
+            addPlayers();
+            if (players.length !== 18) {
+                alert('אנא מלא את כל השדות.');
+                return;
+            }
+            shuffle(players);
+            players.sort((a, b) => b.level - a.level);
+            const teams = [[], [], []];
+            for (let i = 0; i < players.length; i++) {
+                teams[i % 3].push(players[i]);
+            }
+            for (let i = 0; i < 3; i++) {
+                const teamElement = document.getElementById(`team${i+1}`).querySelector('ul');
+                const summaryElement = document.getElementById(`summary${i+1}`);
+                teamElement.innerHTML = '';
+                let totalLevel = 0;
+                teams[i].forEach(player => {
+                    const li = document.createElement('li');
+                    li.textContent = `${player.name} (רמה: ${player.level})`;
+                    teamElement.appendChild(li);
+                    totalLevel += player.level;
+                });
+                const avgLevel = (totalLevel / teams[i].length).toFixed(2);
+                summaryElement.textContent = `ממוצע רמה: ${avgLevel}`;
+            }
+            showStatus('הקבוצות חולקו בהצלחה');
+        }
+
+        function resetForm() {
+            loadPlayerSelection();
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`team${i}`).querySelector('ul').innerHTML = '';
+                document.getElementById(`summary${i}`).textContent = '';
+            }
+            showStatus('הטופס אופס בהצלחה');
+        }
+
+        function showStatus(message) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            setTimeout(() => {
+                statusMessage.textContent = '';
+            }, 3000);
+        }
+
+        function navigateToDatabase() {
+            window.location.href = 'database.html';
+        }
+
+        window.onload = loadPlayerSelection;
+    </script>
+</body>
+</html>
